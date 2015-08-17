@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Digest and Apply</title>
+</head>
+<body>
+<div class="panel">
+    <small>{{message}}</small>
+</div>
+<div ng-controller="MyController">
+    <div class="panel">
+        <small>{{message}}</small>
+    </div>
+</div>
+<script src="bower_components/angular/angular.js"></script>
+<script>
+    angular.module('myApp', []).controller('MyController', function ($scope, $rootScope) {
+        var root_scope_message = 'This is a message from $rootScope. Count: ';
+        var scope_message = 'This is a message from the scope of MyController. Count: ';
+        var x = 0;
+
+        $rootScope.message = root_scope_message + x;
+        $scope.message = scope_message + x++;
+
+        setInterval(function () {
+            $rootScope.message = root_scope_message + x;
+            $scope.message = scope_message + x++;
+
+            $scope.$digest();
+
+        }, 1000);
+    });
+</script>
+</body>
+</html>

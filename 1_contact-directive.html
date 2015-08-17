@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="base.css"/>
+    <script type="text/ng-template" id="_contact.html">
+        <div>
+            <ul>
+                <li>
+                    <span ng-hide="edit">{{name}}</span>
+                    <input type="text" ng-model="name" ng-show="edit"/>
+                </li>
+
+                <li>{{email}}</li>
+                <li>
+                    <button ng-click="edit = !edit" ng-hide="edit">Edit</button>
+                    <button ng-click="edit = !edit; save();" ng-show="edit">Save</button>
+                </li>
+            </ul>
+        </div>
+    </script>
+</head>
+<body>
+
+<div ng-controller="MyController">
+    <div contact name="name" email="email"></div>
+
+    <div>
+        <h2>Scope of the Controller</h2>
+        <div>
+            <input type="text" ng-model="name"/> | {{email}}
+        </div>
+    </div>
+</div>
+
+<script src="bower_components/angular/angular.js"></script>
+<script>
+    angular.module('myApp', []).controller('MyController', function ($scope, Contact) {
+        $scope.name = 'Natalie';
+        $scope.email = 'natalie@gmail.com';
+        $scope.save = function (contact) {
+            Contact.save(contact);
+        }
+    }).directive('contact', function () {
+        return {
+            templateUrl: '_contact.html',
+            scope: {
+                name: '=',
+                email: '=' // &
+            },
+            link: function (scope, element, attributes) {
+                scope.edit = false;
+                scope.save = function () {
+                    console.log(scope.name);
+                };
+            }
+        };
+    });
+</script>
+</body>
+</html>
