@@ -18,11 +18,15 @@
     // Factory recipe returns the object which will behave as the service
     // Service recipe is a constructor that will be instantiated and used as the service
 
-    angular.module('myApp', []).config(function () {
-        console.log();
-    }).controller('MyController', function ($scope, Contact, Private_Key) {
-        $scope.contacts = Contact.getAllContacts();
-        $scope.key = Private_Key;
+    angular.module('myApp', []).config(function (BMWProvider, Private_Key) {
+
+        console.log(BMWProvider);
+        BMWProvider.type = 'SUV';
+
+    }).controller('MyController', function ($scope, BMW) {
+        // $scope.contacts = Contact.getAllContacts();
+        // $scope.key = Private_Key;
+        $scope.key = BMW.type;
     }).service('Contact_Service', function ContactConstructor() {
         // constructor function
         var contacts = [{ name: 'Natalie' }, { name: 'Charles' }];
@@ -38,22 +42,22 @@
         };
     }).value('Public_Key', '74CDFE66-AECB-44A6-8258-46A7A0F4C437')
             .constant('Private_Key', '74CDFEasdfasdf66-AECB-44A6-8258-46A7A0F4C437')
-            .provider('Contact', function (info) {
-                var contacts = [{ name: 'Natalie' }, { name: 'Charles' }];
-                var info = info;
-                this.$get = function FactoryRecipeFunction() {
-                    return { // this object is the service
-                        getAllContacts: function () {
-                            return contacts;
-                        },
-                        application_wide_parameters: info
-                    };
-                }
-            });
+            .provider('BMW', Car);
+
+
+    function Car() {
+        this.type = 'sedan';
+        var self = this;
+        this.$get = function () {
+            return {
+                type: self.type
+            };
+        };
+    }
 
 
 
-    // Constructor function --> Instantiate --> Object x
+    // Constructor function --> Instantiate --> Object x (Provider object)
     // x.$get method which is the factory recipe function
 
 
